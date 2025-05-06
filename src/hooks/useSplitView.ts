@@ -63,11 +63,27 @@ export const useSplitView = () => {
     (routeName: string, params: Record<string, any> = {}) => {
       if (detailNavigator.isMounted()) {
         detailNavigator.setRoot(routeName, params);
-      }
-      else {
+      } else {
         masterNavigator.push(routeName, params);
       }
-    }, [detailNavigator, masterNavigator])
+    },
+    [detailNavigator, masterNavigator]
+  );
+
+  /**
+   * Reset the details navigator with a new stack starting from this new route
+   *
+   * @param routeName The name of the route to navigate
+   * @param params The params to pass to the route
+   */
+  const resetDetail = useCallback(
+    (routeName: string, params: Record<string, any> = {}) => {
+      if (detailNavigator.isMounted()) {
+        detailNavigator.setRoot(routeName, params);
+      }
+    },
+    [detailNavigator]
+  );
 
   return useMemo(
     () => ({
@@ -75,14 +91,16 @@ export const useSplitView = () => {
       pushOnMaster,
       navigateOnDetail,
       pushOnDetail,
-      setRootOnDetail
+      setRootOnDetail,
+      resetDetail,
     }),
     [
       detailNavigator.setNavigator,
       navigateOnDetail,
       pushOnDetail,
       pushOnMaster,
-      setRootOnDetail
+      setRootOnDetail,
+      resetDetail,
     ]
   );
 };
